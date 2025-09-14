@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AI-Powered Resume Builder & Job Matcher (Django)
 
 ## Quickstart
@@ -22,3 +23,6 @@ python manage.py runserver
 - `services/ai.py` currently returns a trivial transformation. Replace with a real AI call (OpenAI, etc.).
 - Switch SQLite to Postgres for production.
 - Add authentication UI or use Django Allauth if needed.
+=======
+# Ai-resume/job-tracker
+>>>>>>> b13fe57d664825a752b2982de7abf0c2897079a5
