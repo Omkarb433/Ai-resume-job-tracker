@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <h2 class="card-title text-primary mb-4 text-center">Create a New Job</h2>
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Job Title -->
+                <div class="mb-3">
+                    <label for="jobTitle" class="form-label">Job Title</label>
+                    <input type="text" class="form-control" id="jobTitle" name="title" placeholder="Enter job title" required>
+                </div>
+
+                <!-- Company Name -->
+                <div class="mb-3">
+                    <label for="companyName" class="form-label">Company Name</label>
+                    <input type="text" class="form-control" id="companyName" name="company" placeholder="Enter company name" required>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="jobDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="jobDescription" name="description" rows="4" placeholder="Enter job description"></textarea>
+                </div>
+
+                <!-- Save Button -->
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Save & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

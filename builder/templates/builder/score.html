@@ -1,0 +1,46 @@
+{% extends "builder/base.html" %}
+{% block content %}
+<div class="container my-5">
+
+  <!-- Page Title -->
+  <h2 class="mb-4 text-primary fw-bold">Job Match Results</h2>
+
+  <!-- Job Info -->
+  <div class="mb-4">
+    <h4 class="fw-semibold">{{ job.title }}</h4>
+    <p class="text-muted mb-0">{{ job.company }}</p>
+  </div>
+
+  <!-- Scores Section -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-6">
+      <div class="card text-center shadow-sm border-0 p-4">
+        <h5 class="text-secondary">ATS Score</h5>
+        <p class="display-5 fw-bold text-success">{{ application.ats_score }}%</p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card text-center shadow-sm border-0 p-4">
+        <h5 class="text-secondary">Match Score</h5>
+        <p class="display-5 fw-bold text-primary">{{ application.match_score }}%</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Improve Form -->
+  <h3 class="fw-semibold mb-3">Improve Resume Bullet</h3>
+  <form method="post" action="{% url 'improve_text' %}" class="card shadow-sm border-0 p-4">
+    {% csrf_token %}
+    <input type="hidden" name="prompt"
+      value="Rewrite to be concise, action-focused, quantified, and ATS-friendly." />
+    
+    <div class="mb-3">
+      <label for="text" class="form-label">Paste your bullet point</label>
+      <textarea id="text" name="text" rows="4" class="form-control"
+        placeholder="e.g. Led a team of 5 to develop a resume builder app, improving efficiency by 30%."></textarea>
+    </div>
+
+    <button class="btn btn-primary px-4" type="submit">✨ AI Improve</button>
+  </form>
+</div>
+{% endblock %}

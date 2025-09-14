@@ -1,0 +1,31 @@
+{% extends "builder/base.html" %}
+{% block content %}
+<div style="max-width: 700px; margin: 50px auto; font-family: sans-serif;">
+    <h2>Improve Your Text</h2>
+    <form method="post" action="{% url 'improve_text' %}">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 20px;">
+            <label for="text">Text to Improve:</label><br>
+            <textarea name="text" id="text" rows="6" style="width:100%; padding:10px;" placeholder="Paste your text here..."></textarea>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label for="prompt">Prompt (Optional):</label><br>
+            <input type="text" name="prompt" id="prompt" style="width:100%; padding:10px;" 
+                   placeholder="E.g., Rewrite to be concise and action-focused">
+        </div>
+
+        <button type="submit" style="padding:10px 20px; background-color:#0a66c2; color:white; border:none; cursor:pointer;">
+            Improve Text
+        </button>
+    </form>
+
+    {% if improved_text %}
+    <div style="margin-top: 30px; padding: 20px; background: #f7f7f7; border-radius: 8px;">
+        <h3>Improved Text:</h3>
+        <pre>{{ improved_text }}</pre>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

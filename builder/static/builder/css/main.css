@@ -1,0 +1,9 @@
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+nav a { margin-right: 12px; text-decoration: none; }
+.btn { padding: 8px 14px; border: 1px solid #ccc; border-radius: 8px; }
+.cards { display: flex; gap: 16px; margin: 12px 0; }
+.card { border: 1px solid #ddd; padding: 12px; border-radius: 10px; min-width: 160px; }
+.big { font-size: 28px; margin: 6px 0 0; }
+ul { padding-left: 20px; }
+textarea, input { width: 100%; max-width: 720px; }

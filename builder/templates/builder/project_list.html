@@ -1,0 +1,30 @@
+<!-- templates/builder/project_list.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+  <h3 class="mb-4" style="color: #0a66c2;">My Projects</h3>
+
+  {% if projects %}
+    <ul class="list-group">
+      {% for project in projects %}
+        <li class="list-group-item">
+          <strong>{{ project.title }}</strong>
+          {% if project.tech_stack %} — <small class="text-muted">{{ project.tech_stack }}</small>{% endif %}
+          {% if project.link %} — <a href="{{ project.link }}" target="_blank">View Project</a>{% endif %}
+          <div class="mt-2">
+            <a href="{% url 'edit_project' project.pk %}" class="btn btn-sm btn-outline-warning">Edit</a>
+            <form method="post" action="{% url 'delete_project' project.pk %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger"
+                onclick="return confirm('Are you sure?');">Delete</button>
+            </form>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-muted">No projects yet. <a href="#">Add one</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "builder/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h4>Edit Certification</h4>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Certification Title</label>
+            <input type="text" name="title" class="form-control" value="{{ certification.title }}" required>
+        </div>
+        <div class="mb-3">
+            <label>Issuer</label>
+            <input type="text" name="issuer" class="form-control" value="{{ certification.issuer }}">
+        </div>
+        <div class="mb-3">
+            <label>Date</label>
+            <input type="date" name="date" class="form-control" value="{{ certification.date|date:'Y-m-d' }}">
+        </div>
+        <div class="mb-3">
+            <label>Link (Optional)</label>
+            <input type="url" name="link" class="form-control" value="{{ certification.link }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{% url 'certification' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "builder/base.html" %}
+{% block content %}
+<style>
+    .upload-container {
+        max-width: 700px;
+        margin: 3rem auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        padding: 40px;
+        text-align: center;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .upload-container h3 {
+        color: #0a66c2;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .upload-btn {
+        background-color: #0A66C2;
+        color: #fff;
+        font-weight: 600;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        margin-top: 1rem;
+    }
+    .upload-btn:hover {
+        background-color: #004182;
+    }
+
+    .drag-area {
+        border: 2px dashed #0a66c2;
+        border-radius: 10px;
+        padding: 40px;
+        margin-top: 20px;
+        transition: background-color 0.3s ease, border 0.3s ease;
+        cursor: pointer;
+    }
+    .drag-area.active {
+        background-color: #f0f8ff;
+        border-color: #004182;
+    }
+    .drag-area p {
+        font-size: 1.1rem;
+        color: #212121;
+        margin-bottom: 0.5rem;
+    }
+    .drag-area small {
+        color: #666;
+    }
+</style>
+
+<div class="upload-container">
+    <h3>Upload Your Resume</h3>
+    <form method="post" enctype="multipart/form-data" id="resumeForm">
+        {% csrf_token %}
+
+        <!-- Hidden input -->
+        <input type="file" name="resume" id="resumeInput" accept=".pdf,.docx,.txt" hidden>
+
+        <!-- Drag & Drop Area -->
+        <div class="drag-area" id="dragArea">
+            <p>Drag & Drop your resume here</p>
+            <small>or</small><br>
+            <button type="button" class="upload-btn" onclick="document.getElementById('resumeInput').click();">
+                Choose File
+            </button>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary profile-button">Save & Continue</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const dragArea = document.getElementById("dragArea");
+    const fileInput = document.getElementById("resumeInput");
+    const form = document.getElementById("resumeForm");
+
+    // Click upload
+    fileInput.addEventListener("change", () => {
+        form.submit();
+    });
+
+    // Drag & Drop
+    dragArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dragArea.classList.add("active");
+    });
+
+    dragArea.addEventListener("dragleave", () => {
+        dragArea.classList.remove("active");
+    });
+
+    dragArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dragArea.classList.remove("active");
+
+        if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            form.submit();
+        }
+    });
+</script>
+{% endblock %}

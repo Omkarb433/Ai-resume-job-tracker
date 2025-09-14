@@ -1,0 +1,113 @@
+{% extends "builder/base.html" %}
+{% block content %}
+<style>
+    .linkedin-container {
+        width: 900px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        padding: 40px 50px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #212121;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+    }
+    h4 {
+        color: #0a66c2;
+        font-weight: 600;
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+    }
+    .labels {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 6px;
+        display: block;
+        cursor: pointer;
+    }
+    .form-control {
+        border: 1px solid #ccd6dd;
+        border-radius: 8px;
+        padding: 14px 20px;
+        font-size: 1.1rem;
+        width: 100%;
+        margin-bottom: 20px;
+        height: 48px;
+        transition: border-color 0.3s ease;
+        font-family: inherit;
+        color: #212121;
+    }
+    .form-control:focus {
+        border-color: #0a66c2;
+        outline: none;
+        box-shadow: 0 0 5px rgba(10,102,194,0.5);
+    }
+    textarea.form-control {
+        height: auto;
+        min-height: 120px;
+        resize: vertical;
+    }
+    .btn-primary {
+        background-color: #0a66c2;
+        border: none;
+        padding: 12px 36px;
+        font-weight: 600;
+        font-size: 1rem;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+    .btn-primary:hover {
+        background-color: #004182;
+    }
+    .btn-outline-secondary {
+        border: 1px solid #6c757d;
+        color: #6c757d;
+        padding: 12px 36px;
+        font-weight: 600;
+        border-radius: 4px;
+        background: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-outline-secondary:hover {
+        background: #6c757d;
+        color: #fff;
+    }
+</style>
+
+<div class="container d-flex justify-content-center">
+  <div class="linkedin-container">
+    <h4>Edit Project</h4>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="labels">Project Title</label>
+        <input type="text" name="title" value="{{ project.title }}" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="labels">Tech Stack (optional)</label>
+        <input type="text" name="tech_stack" value="{{ project.tech_stack }}" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label class="labels">Project Link (optional)</label>
+        <input type="url" name="link" value="{{ project.link }}" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label class="labels">Description</label>
+        <textarea name="description" class="form-control" required>{{ project.description }}</textarea>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+        <a href="{% url 'project' %}" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

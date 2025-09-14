@@ -1,0 +1,38 @@
+{% extends "builder/base.html" %}
+{% block content %}
+<div class="container mt-5" style="max-width: 950px;">
+  <div class="card shadow-sm border-0 rounded-3">
+    <div class="card-body p-5">
+      
+      <!-- Header -->
+      <h2 class="fw-bold mb-4" style="color:#0A66C2;">
+        ✏️ Edit Job
+      </h2>
+
+      <!-- Form -->
+      <form method="post" class="needs-validation">
+        {% csrf_token %}
+        <div class="mb-4">
+          {{ form.as_p }}
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-end gap-3 mt-4">
+          <!-- Cancel Button (gray pill) -->
+          <a href="{% url 'dashboard' %}" 
+             class="btn px-4 py-2"
+             style="background-color:#e4e6eb; color:#333; font-weight:500; border-radius:50px;">
+            Cancel
+          </a>
+
+          <!-- Save Button (LinkedIn blue) -->
+          <button type="submit" class="btn px-4 py-2"
+                  style="background-color:#0A66C2; color:white; font-weight:600; border-radius:50px;">
+            💾 Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

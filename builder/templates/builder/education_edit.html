@@ -1,0 +1,24 @@
+{% extends "builder/base.html" %}
+{% block content %}
+<div class="container d-flex justify-content-center">
+  <div class="linkedin-container">
+    <h4>Edit Education</h4>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-3">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+            <div class="text-danger small">{{ field.errors|striptags }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary profile-button">Update Education</button>
+        <a href="{% url 'education' %}" class="btn btn-outline-primary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

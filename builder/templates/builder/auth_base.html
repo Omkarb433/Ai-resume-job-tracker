@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Auth | Login & Register</title>
+  <link rel="stylesheet" href="{% static 'builder/css/style.css' %}">
+</head>
+<body>
+  <div class="container {% if show_register %}active{% endif %}">
+    <div class="curved-shape"></div>
+    <div class="curved-shape2"></div>
+
+    <!-- Login Form -->
+    <div class="form-box Login {% if not show_register %}active{% endif %}">
+      <h2>Login</h2>
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ login_form.username }}
+        {{ login_form.password }}
+        <button class="btn" type="submit">Login</button>
+        <p>Don’t have an account? <a href="#" id="showRegister">Sign Up</a></p>
+      </form>
+    </div>
+
+    <!-- Register Form -->
+    <div class="form-box Register {% if show_register %}active{% endif %}">
+      <h2>Register</h2>
+      <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        {{ register_form.username }}
+        {{ register_form.email }}
+        {{ register_form.password1 }}
+        {{ register_form.password2 }}
+        <button class="btn" type="submit">Register</button>
+        <p>Already have an account? <a href="#" id="showLogin">Sign In</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="{% static 'builder/js/auth.js' %}"></script>
+  <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+</body>
+</html>

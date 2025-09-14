@@ -1,0 +1,185 @@
+{% extends "builder/base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+<style>
+    .linkedin-container {
+        width: 1000px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        padding: 40px 50px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #212121;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+    }
+    h4 {
+        color: #0a66c2;
+        font-weight: 600;
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+    }
+    .labels {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 6px;
+        display: block;
+        cursor: pointer;
+    }
+    .form-control {
+        border: 1px solid #ccd6dd;
+        border-radius: 8px;
+        padding: 14px 20px;
+        font-size: 1.1rem;
+        width: 100%;
+        margin-bottom: 20px;
+        height: 48px;
+        transition: border-color 0.3s ease;
+        font-family: inherit;
+        color: #212121;
+    }
+    .form-control:focus {
+        border-color: #0a66c2;
+        outline: none;
+        box-shadow: 0 0 5px rgba(10,102,194,0.5);
+    }
+    textarea.form-control {
+        height: auto;
+        min-height: 120px;
+        resize: vertical;
+    }
+    .btn-outline-primary {
+        border-color: #0a66c2;
+        color: #0a66c2;
+        font-weight: 600;
+        padding: 10px 30px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        min-width: 220px;
+        cursor: pointer;
+    }
+    .btn-outline-primary:hover {
+        background-color: #0a66c2;
+        color: #fff;
+    }
+    .btn-primary.profile-button {
+        background-color: #0a66c2;
+        border: none;
+        padding: 12px 36px;
+        font-weight: 600;
+        font-size: 1rem;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        min-width: 180px;
+        cursor: pointer;
+    }
+    .btn-primary.profile-button:hover {
+        background-color: #004182;
+    }
+    .certificate-card {
+        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border: 1px solid #e1e4e8;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    .certificate-card h5 { color: #0a66c2; font-weight: 600; }
+    .certificate-card small { color: #6c757d; }
+    .certificate-card a {
+        color: #0a66c2;
+        text-decoration: none;
+    }
+    .certificate-card a:hover { text-decoration: underline; }
+</style>
+
+<form method="post" action="{% url 'save_certifications' %}" novalidate>
+    {% csrf_token %}
+
+    <div class="certificate-form border rounded p-3 mb-3">
+        <div class="row">
+            <div class="col-md-6">
+                <label class="labels">Certificate Name</label>
+                <input type="text" name="name" class="form-control" placeholder="e.g. AWS Certified Solutions Architect" maxlength="255" required>
+            </div>
+            <div class="col-md-6">
+                <label class="labels">Issuing Organization</label>
+                <input type="text" name="issuer" class="form-control" placeholder="e.g. Amazon Web Services" maxlength="255">
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label class="labels">Issue Date</label>
+                <input type="date" name="issue_date" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label class="labels">Expiration Date (Optional)</label>
+                <input type="date" name="expiry_date" class="form-control">
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <label class="labels">Credential URL (Optional)</label>
+                <input type="url" name="credential_url" class="form-control" placeholder="https://example.com/certificate/123">
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3 text-center">
+                <button type="submit" name="action" value="add" class="btn btn-outline-primary">
+                    + Add Certificate
+                </button>
+                <button type="submit" name="action" value="continue" class="btn btn-primary profile-button">
+                    Save & Continue
+                </button>
+    </div>
+</form>
+
+
+<!-- List of Saved Certificates -->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="p-4 bg-white rounded shadow-sm border">
+
+                <h5 class="fw-bold text-center mb-4 pb-2 border-bottom" style="color: #0a66c2;">My Certifications</h5>
+
+                {% if certifications %}
+                    <ul class="list-unstyled">
+                        {% for cert in certifications %}
+                            <li class="certificate-card">
+                                <h5>{{ cert.name }}</h5>
+                                <small>Issued by {{ cert.issuer }}</small><br>
+                                <small>{{ cert.issue_date }}{% if cert.expiry_date %} - {{ cert.expiry_date }}{% else %} (No Expiry){% endif %}</small>
+
+                                {% if cert.credential_url %}
+                                    <div class="mt-2">
+                                        <a href="{{ cert.credential_url }}" target="_blank">View Credential</a>
+                                    </div>
+                                {% endif %}
+
+                                <div class="mt-3 d-flex gap-2">
+                                    <a href="{% url 'edit_certification' cert.pk %}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                    <form method="post" action="{% url 'delete_certification' cert.pk %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to delete this certification?');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center text-muted py-4">No certifications added yet.</p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

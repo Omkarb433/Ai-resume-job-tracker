@@ -1,0 +1,143 @@
+{% extends "builder/base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+<style>
+    .linkedin-container {
+        width: 1000px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        padding: 40px 50px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #212121;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+    }
+    h4 {
+        color: #0a66c2;
+        font-weight: 600;
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+    }
+    .labels {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 6px;
+        display: block;
+    }
+    .form-control {
+        border: 1px solid #ccd6dd;
+        border-radius: 8px;
+        padding: 14px 20px;
+        font-size: 1.1rem;
+        width: 100%;
+        margin-bottom: 20px;
+        height: 48px;
+        transition: border-color 0.3s ease;
+        font-family: inherit;
+        color: #212121;
+    }
+    .form-control:focus {
+        border-color: #0a66c2;
+        outline: none;
+        box-shadow: 0 0 5px rgba(10,102,194,0.5);
+    }
+    .btn-primary.profile-button {
+        background-color: #0a66c2;
+        border: none;
+        padding: 12px 36px;
+        font-weight: 600;
+        font-size: 1rem;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        min-width: 180px;
+        cursor: pointer;
+    }
+    .btn-primary.profile-button:hover {
+        background-color: #004182;
+    }
+</style>
+
+<div class="container d-flex justify-content-center">
+    <div class="linkedin-container">
+        <form method="post" enctype="multipart/form-data" id="resumeForm">
+            {% csrf_token %}
+
+            <h4>Profile Settings</h4>
+
+            <!-- Profile name & email -->
+            <div class="text-center mb-4">
+                <span class="font-weight-bold d-block">{{ form.instance.full_name|default:"Your Name" }}</span>
+                <span class="text-black-50 d-block">{{ form.instance.email|default:"" }}</span>
+            </div>
+
+            <!-- Profile picture -->
+            <div class="text-center mb-4">
+                <img class="rounded-circle"
+                     width="150px"
+                     id="profilePreview"
+                     src="{% if form.instance.profile_pic %}{{ form.instance.profile_pic.url }}{% else %}https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg{% endif %}">
+                <div class="mt-3">
+                    {{ form.profile_pic }}
+                </div>
+            </div>
+
+            <!-- Form fields -->
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <label class="labels" for="{{ form.full_name.id_for_label }}">Full Name</label>
+                    {{ form.full_name|add_class:"form-control" }}
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="labels" for="{{ form.title.id_for_label }}">Title</label>
+                    {{ form.title|add_class:"form-control" }}
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="labels" for="{{ form.summary.id_for_label }}">Summary</label>
+                    {{ form.summary|add_class:"form-control" }}
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="labels" for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email|add_class:"form-control" }}
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="labels" for="{{ form.phone.id_for_label }}">Phone</label>
+                    {{ form.phone|add_class:"form-control" }}
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="labels" for="{{ form.location.id_for_label }}">Location</label>
+                    {{ form.location|add_class:"form-control" }}
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="labels" for="{{ form.linkedin.id_for_label }}">LinkedIn</label>
+                    {{ form.linkedin|add_class:"form-control" }}
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="labels" for="{{ form.github.id_for_label }}">GitHub</label>
+                    {{ form.github|add_class:"form-control" }}
+                </div>
+
+            <div class="mt-4 text-center">
+                <button type="submit" class="btn btn-primary profile-button">Save & Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Image preview -->
+<script>
+  const fileInput = document.getElementById("id_profile_pic");
+  if (fileInput) {
+    fileInput.addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("profilePreview").src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  
+</script>
+{% endblock %}
