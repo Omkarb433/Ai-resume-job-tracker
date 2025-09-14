@@ -1,1 +1,1 @@
-# Ai-resume-job-tracker
+# Ai-resume/job-tracker
