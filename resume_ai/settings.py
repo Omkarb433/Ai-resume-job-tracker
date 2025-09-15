@@ -1,23 +1,29 @@
 from pathlib import Path
 import os
+import dj_database_url
 from dotenv import load_dotenv
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Security
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-key")
 DEBUG = os.getenv("DEBUG", "True") == "True"
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", os.environ.get("RENDER_EXTERNAL_HOSTNAME")]
 
+# Installed apps
 INSTALLED_APPS = [
     'django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
     'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles',
     'builder',
-    # 'rest_framework',
-   'widget_tweaks',
+    'widget_tweaks',
 ]
 
+# Middleware (Whitenoise added after SecurityMiddleware)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -27,20 +33,25 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'resume_ai.urls'
-TEMPLATES = [{
-    'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    'DIRS': [
-    BASE_DIR / 'templates',
-    BASE_DIR / 'templates1',   
-],
-    'APP_DIRS': True,
-    'OPTIONS': {'context_processors': [
-        'django.template.context_processors.debug',
-        'django.template.context_processors.request',
-        'django.contrib.auth.context_processors.auth',
-        'django.contrib.messages.context_processors.messages',
-    ]},
-}]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR / 'templates1',
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 # Media files (user uploads)
 MEDIA_URL = '/media/'
@@ -49,17 +60,25 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 WSGI_APPLICATION = 'resume_ai.wsgi.application'
 ASGI_APPLICATION = 'resume_ai.asgi.application'
 
+# Database (use DATABASE_URL if set, else fallback to sqlite)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    )
 }
 
-STATIC_URL = 'static/'
+# Static files
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'builder' / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Let Whitenoise compress static files
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# API keys
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # Authentication redirects
